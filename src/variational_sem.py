@@ -1,12 +1,16 @@
 from abc import ABC, abstractmethod
+import pandas as pd
 from typing import Dict, Literal
-from .variational_family import MeanFieldVariationalFamily, SingleCFAVariationalFamily
-from .statistical_model import BayesianStatisticalModel, SingleFactorCFA
 import torch
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from tqdm import trange
 from timeit import default_timer as timer
 from torch.utils.tensorboard import SummaryWriter
+
+from .analysis.sampling import sample_from_distribution
+
+from .variational_family import MeanFieldVariationalFamily, SingleCFAVariationalFamily
+from .statistical_model import BayesianStatisticalModel, SingleFactorCFA
 
 @dataclass 
 class VIOptimisationParameters: 
@@ -69,12 +73,17 @@ class VIModel(ABC):
         else: 
             raise ValueError('Alpha must be < 1')
             
-
     @property
     @abstractmethod
     def create_optimizer(self): 
         '''Customise optimizer object for each variational family'''
         pass 
+
+    # @property 
+    # @abstractmethod
+    # def sample_qvar(self, **kwargs): 
+    #     '''Sample each statistical model parameter from its optimised variational distribution'''
+    #     pass 
 
     def _rel_error(self, prev, next): 
         rel = {key: ((next[key] - prev[key])/prev[key]).abs().max() for key in prev}
@@ -124,7 +133,7 @@ class VIModel(ABC):
 
             #Assess convergence - get the scalar parameter values 
             next = self.qvar.scalar_param_values()
-            if prev is not None:
+            if (t>1):
                 error = self._rel_error(prev, next)
                 rel_error.append(error)
                 if(error<=optimisation_parameters.relative_error_threshold): 
@@ -135,10 +144,11 @@ class VIModel(ABC):
                 else: 
                     #Reset the counter - we need a string of consecutively small errors
                     count_small_errors = 0
-            prev  = next
+            prev=next
 
         #Update results
         end_time = timer() 
+        writer.close()
         self.is_fitted = True
         self.results = VIOptimisationResults(
             opt_params = optimisation_parameters, 
@@ -159,10 +169,9 @@ class SingleCFAVIModel(VIModel):
     
     def create_optimizer(self): 
         #TODO: Make more customized, if required 
-        optimizer = torch.optim.Adam([{'params': [self.qvar.dist_by_var['nu'].var_params, self.qvar.dist_by_var['lam'].var_params], 'lr': 0.01},\
-     {'params': [self.qvar.dist_by_var['psi'].var_params, self.qvar.dist_by_var['sig2'].var_params], 'lr': 0.1},\
-         {'params':[self.qvar.dist_by_var['eta'].var_params], 'lr': 0.01} 
+        optimizer = torch.optim.Adam([{'params': [self.qvar.qvar_by_var['nu'].var_params, self.qvar.qvar_by_var['lam'].var_params], 'lr': 0.01},\
+     {'params': [self.qvar.qvar_by_var['psi'].var_params, self.qvar.qvar_by_var['sig2'].var_params], 'lr': 0.1},\
+         {'params':[self.qvar.qvar_by_var['eta'].var_params], 'lr': 0.01} 
          ]
          )
-        return optimizer
-        
+        return optimizer 

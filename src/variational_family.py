@@ -8,19 +8,19 @@ class MeanFieldVariationalFamily(ABC):
     '''Template class for variational family, assuming that each model parameter is independently distributed (mean field assumption)'''
     def __init__(self, qvar: Dict[str, VariationalDistribution]):
         '''Instantiate variational family'''
-        self.dist_by_var = qvar 
+        self.qvar_by_var = qvar 
 
     def generate_theta_sample(self): 
         '''Generate single sample of Bayesian model parameters given current variational distribution, assuming independence'''
-        return {var: qvar.rsample() for (var,qvar) in self.dist_by_var.items()}
+        return {var: qvar.rsample() for (var,qvar) in self.qvar_by_var.items()}
     
     def entropy(self, theta_sample): 
-        qvar_prob = {var: self.dist_by_var[var].log_prob(sample) for (var,sample) in theta_sample.items()}
+        qvar_prob = {var: self.qvar_by_var[var].log_prob(sample) for (var,sample) in theta_sample.items()}
         return sum(qvar_prob.values())
     
     def scalar_param_values(self): 
         '''Extract parameter values without gradient information'''
-        return {key: self.dist_by_var[key].var_params.clone().detach() for key in self.dist_by_var}
+        return {key: self.qvar_by_var[key].var_params.clone().detach() for key in self.qvar_by_var}
     
     @abstractmethod 
     def natural_param_values(self): 
@@ -48,26 +48,26 @@ class SingleCFAVariationalFamily(MeanFieldVariationalFamily):
             scalars = {}
             # Handle nu parameters (if not degenerate)
             if 'nu' not in self.degenerates:
-                for i in range(len(self.dist_by_var['nu'].var_params[0])):
-                    scalars[f'nu{i+1}_mean'] = self.dist_by_var['nu'].var_params[0][i].item()
-                    scalars[f'nu{i+1}_sig'] = self.dist_by_var['nu'].var_params[1][i].exp().item()
+                for i in range(len(self.qvar_by_var['nu'].var_params[0])):
+                    scalars[f'nu{i+1}_mean'] = self.qvar_by_var['nu'].var_params[0][i].item()
+                    scalars[f'nu{i+1}_sig'] = self.qvar_by_var['nu'].var_params[1][i].exp().item()
             
             # Handle lambda parameters (if not degenerate)
             if 'lam' not in self.degenerates:
-                for i in range(len(self.dist_by_var['lam'].var_params[0])):
-                    scalars[f'lambda{i+2}_mean'] = self.dist_by_var['lam'].var_params[0][i].item()
-                    scalars[f'lambda{i+2}_sig'] = self.dist_by_var['lam'].var_params[1][i].exp().item()
+                for i in range(len(self.qvar_by_var['lam'].var_params[0])):
+                    scalars[f'lambda{i+2}_mean'] = self.qvar_by_var['lam'].var_params[0][i].item()
+                    scalars[f'lambda{i+2}_sig'] = self.qvar_by_var['lam'].var_params[1][i].exp().item()
             
             # Handle psi parameters (if not degenerate)
             if 'psi' not in self.degenerates:
-                for i in range(len(self.dist_by_var['psi'].var_params[0])):
-                    scalars[f'psi_{i+1}_alpha'] = self.dist_by_var['psi'].var_params[0][i].exp().item()
-                    scalars[f'psi_{i+1}_beta'] = self.dist_by_var['psi'].var_params[1][i].exp().item()
+                for i in range(len(self.qvar_by_var['psi'].var_params[0])):
+                    scalars[f'psi_{i+1}_alpha'] = self.qvar_by_var['psi'].var_params[0][i].exp().item()
+                    scalars[f'psi_{i+1}_beta'] = self.qvar_by_var['psi'].var_params[1][i].exp().item()
             
             # Handle sig2 parameters (if not degenerate)
             if 'sig2' not in self.degenerates:
-                scalars['sig2_alpha'] = self.dist_by_var['sig2'].var_params[0].exp().item()
-                scalars['sig2_beta'] = self.dist_by_var['sig2'].var_params[1].exp().item()
+                scalars['sig2_alpha'] = self.qvar_by_var['sig2'].var_params[0].exp().item()
+                scalars['sig2_beta'] = self.qvar_by_var['sig2'].var_params[1].exp().item()
             
             # Handle eta parameters (if not degenerate)
             if 'eta' not in self.degenerates:

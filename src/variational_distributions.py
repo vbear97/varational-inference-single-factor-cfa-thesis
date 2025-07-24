@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Dict, Optional
 import torch 
 from torch import tensor as tensor
 from .pdfs import InverseGamma
+import pandas as pd
 
 class VariationalDistribution(ABC): 
     '''Template class for variational distribution object, which is a wrapper around a torch distribution object.'''
@@ -66,7 +67,3 @@ class Degenerate(VariationalDistribution):
 
     def log_prob(self, x): 
         return torch.tensor([0.0])
-
-
-
-    
