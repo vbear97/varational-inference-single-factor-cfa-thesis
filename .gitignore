@@ -1,0 +1,6 @@
+single-cfa-venv-3.10/
+notebooks/tensorboard_runs/
+src/__pycache__
+.DS_Store
+src/mcmc/__pycache__
+src/analysis/__pycache__
