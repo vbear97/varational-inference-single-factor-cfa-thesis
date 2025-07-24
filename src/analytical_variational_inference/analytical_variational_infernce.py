@@ -1,10 +1,9 @@
-from typing import Dict, Union
-from ..analysis.sampling import SingleCFAVariationalParameters
-import rpy2
 import rpy2.robjects as robjects
 import numpy as np
 import torch
 from torch.distributions import MultivariateNormal as mvn
+
+from ..dataclasses import SingleCFAVariationalParameters
 
 from ..pdfs import InverseGamma
 
@@ -145,15 +144,17 @@ def single_factor_cfa_mfvb() -> SingleCFAVariationalParameters:
     rmfvb = robjects.globalenv['MFVBoutput']
     mfvb= {key: torch.from_numpy(np.array(rmfvb.rx2(key)))for key in rmfvb.names}
   
-    # Extract results - Fixed the typos and indexing
+    # Extract results
     nu_mean = mfvb['mu.q.nu.MFVB']                   
     nu_sig2 = mfvb['sigsq.q.nu.MFVB']               
     lam_mean = mfvb['mu.q.lambda.MFVB'][1:]         
-    lam_sig2 = mfvb['sigsq.q.lambda.MFVB'][1:]     
-    sig2_alpha = mfvb['kappa.q.sigsq.MFVB'] / 2    
-    sig2_rate = mfvb['delta.q.sigsq.MFVB'] / 2       
-    psi_alpha = mfvb['kappa.q.psi.MFVB'] / 2       
-    psi_rate = mfvb['delta.q.psi.MFVB'] / 2        
+    lam_sig2 = mfvb['sigsq.q.lambda.MFVB'][1:]  
+    #Extract scalars
+    #TODO: Make this better
+    sig2_alpha = mfvb['kappa.q.sigsq.MFVB'].item()/ 2    
+    sig2_rate = mfvb['delta.q.sigsq.MFVB'].item()/ 2       
+    psi_alpha = mfvb['kappa.q.psi.MFVB']/ 2       
+    psi_rate = mfvb['delta.q.psi.MFVB']/ 2        
 
     distributions_by_param = {
         'nu': mvn(nu_mean, torch.diag(nu_sig2)), 
