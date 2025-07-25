@@ -84,3 +84,14 @@ def plot_credint(
     if 'MCMC' in data: 
         handles.append(mpatches.Patch(color='red', linestyle='--', label='Posterior Mean: MCMC Reference'))
     fig.legend(handles = handles, loc = 'lower right', title = 'Plot Elements', ncols = 1)
+
+def plot_eta(vidf: pd.DataFrame, mcmc_df: pd.DataFrame, moment = Literal['mean', 'var'], figsize = (5,5)): 
+    '''Create scatterplot of eta moments (y-axis) vs MCMC means'''
+    
+    fig, ax = plt.subplots(figsize = (5,5))
+    fig.suptitle(f'Comparison of Eta {moment}')
+    #Plot 
+    ax.scatter(x = getattr(vidf, moment)(), y = getattr(mcmc_df, moment)())
+    ax.set_ylabel(f'MCMC Eta {moment}')
+    ax.set_xlabel(f'VI Eta {moment}')
+    ax.axline(xy1 = (0,0), slope = 1, label = 'y=x line')
