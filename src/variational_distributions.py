@@ -6,7 +6,7 @@ from .pdfs import InverseGamma
 import pandas as pd
 
 class VariationalDistribution(ABC): 
-    '''Template class for variational distribution object, which is a wrapper around a torch distribution object.'''
+    '''Template class for variational distribution, essentially a wrapper around a torch distribution object, that implements reparameterisation gradient sampling.'''
 
     def __init__(self, var_params: tensor):
         self.var_params = var_params
@@ -67,3 +67,5 @@ class Degenerate(VariationalDistribution):
 
     def log_prob(self, x): 
         return torch.tensor([0.0])
+    
+
