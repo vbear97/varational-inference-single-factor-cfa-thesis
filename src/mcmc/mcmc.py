@@ -1,17 +1,17 @@
 import nest_asyncio
 nest_asyncio.apply()
-import pystan
+import stan
 import arviz as az
 import torch
 import pandas as pd
 
-def _mcmc():
+def _mcmc(data):
 
     mccode= """
     data {
     int<lower=0> N; // number of individuals
     int<lower=0> M; // number of items
-    vector[M] y[N]; //Y matrix of M items for N individuadls
+    array[N] vector[M] y; //Y matrix of M items for N individuadls
     real lam_mean; //prior mean for lambda
     real<lower=0> lam_sig2; //prior variance for lambda
     real nu_mean; //prior mean for nu 
@@ -37,10 +37,10 @@ def _mcmc():
     }
 
     model{
-    vector[M] mu[N];
+    array[N] vector[M] mu;
     matrix[M,M] Sigma;
     
-    real cond_sd_lambda[M-1];
+    array[M - 1] real cond_sd_lambda;
     vector[M] lambda;
     
     eta_norm ~ normal(0,1) ;
@@ -69,29 +69,23 @@ def _mcmc():
     }
         """
     #Build posterior 
-    model = pystan.StanModel(model_code = mccode) 
-    return model
+    posterior = stan.build(mccode, data = data) 
+    return posterior
 
 def single_factor_cfa_mcmc(y_data: torch.tensor, hyper_params) -> pd.DataFrame:
     data = {
         "y": y_data.numpy(), 
         "N": y_data.size(0), 
         "M": y_data.size(1), 
-        **hyper_params
     }
 
-    # h = {var:param.item() for var,param in hyper.items()}
+    hyper_params = {var:param.item() for var,param in hyper_params.items()}
+    data.update(hyper_params)
 
-    model = _mcmc()
+    posterior = _mcmc(data)
     #Sample from posterior 
-    fit = model.sampling(
-        data = data, 
-        chains = 4, 
-        warmup = 7500, 
-        iter = 15000, 
-        thin = 1 # no thinning
-        )
-    return fit.to_dataframe()
+    fit = posterior.sample(num_chains = 4, num_warmup = 7500, num_samples = 15_000)
+    return fit.to_frame()
 
     
     
