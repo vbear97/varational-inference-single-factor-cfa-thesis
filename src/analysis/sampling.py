@@ -14,7 +14,11 @@ def sample_from_distribution(dist_by_var: Dict[str, torch.distributions.Distribu
             if sample.ndim>1: 
                 #If multidimensional
                 for i in range(sample.shape[1]): 
-                    samples_by_scalar[var+"."+ str(i+1)] = sample[:,i]
+                    if var!='lam':
+                        #Label lambda values correctly, taking into account that lambda.1 is fixed to 1 for model identifiability purposes 
+                        samples_by_scalar[var+"."+ str(i+1)] = sample[:,i]
+                    else: 
+                        samples_by_scalar[var+"."+ str(i+2)] = sample[:,i]
             else: 
                 samples_by_scalar[var] = sample
     return pd.DataFrame(samples_by_scalar)
