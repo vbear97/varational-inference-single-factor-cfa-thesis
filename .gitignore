@@ -4,4 +4,7 @@ src/__pycache__
 .DS_Store
 src/mcmc/__pycache__
 src/analysis/__pycache__
-**/__pycache__/
+**/__pycache__
+data/
+httpstan-4.13.0 2/
+notebooks/build
