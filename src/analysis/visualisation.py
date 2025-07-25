@@ -34,7 +34,8 @@ def plot_credint(
 
     #Create figure and axes 
     fig, axes = plt.subplots(n_rows, n_cols, figsize = figsize, constrained_layout = True)
-    fig.suptitle(title, fontsize = 14)
+    subtitle = f'Credible Interval Quantiles: {quantiles}'
+    fig.suptitle(title + '\n' + subtitle, fontsize = 14)
 
     #Delete unused axes 
     flattened_axes = axes.flatten()
@@ -51,8 +52,6 @@ def plot_credint(
             'mean': df.mean(), 
             'color': colors[i]
         }
-
-    #Initiate legends
 
     #Plot 
     for i, var in enumerate(variables): 
