@@ -6,6 +6,8 @@ import matplotlib.patches as mpatches
 import matplotlib.lines as mlines
 from dataclasses import dataclass
 import math
+import seaborn as sns
+import numpy as np 
 
 DEFAULT_QUANTILES = [0.0275, 0.975]
 
@@ -95,3 +97,78 @@ def plot_eta(vidf: pd.DataFrame, mcmc_df: pd.DataFrame, moment = Literal['mean',
     ax.set_ylabel(f'MCMC Eta {moment}')
     ax.set_xlabel(f'VI Eta {moment}')
     ax.axline(xy1 = (0,0), slope = 1, label = 'y=x line')
+
+def plot_moments_boxplot(
+    batched_vi_models_by_alpha_k: Dict[tuple[float], list[pd.DataFrame]],
+    mcmc_df: pd.DataFrame, 
+    moment: Literal['mean', 'var'], 
+    showoutliers = True, 
+    fontsize: int = 20
+    ): 
+
+    #Create VI statistics
+    list_summary_df: list[pd.Series] = []
+    for (alpha,K), list_df in batched_vi_models_by_alpha_k.items(): 
+        for index, df in enumerate(list_df):
+            moments= pd.DataFrame([getattr(df, moment)], name = 'moment')
+            moments['alpha'] = alpha 
+            moments['K'] = K 
+            moments['S'] = index 
+            list_summary_df.append(moments)
+    
+    #assume same length 
+    S = len(list_df)
+    df = pd.concatenate(list_summary_df, ignore_index = True)
+
+    #Create MCMC statistics 
+    mcmc_summary = getattr(mcmc_df, moment)
+    
+    #Boxplot 
+    g = sns.catplot(data  = df, 
+                    x = 'alpha', 
+                    y = 'moment', 
+                    hue = 'K', 
+                    col = 'parameter',
+                    kind = 'box', 
+                    showmeans = True, 
+                    sharex = False, 
+                    sharey = False,
+                    col_wrap = 3, 
+                    height = 9,
+                    showfliers = showoutliers
+                    )
+    
+    #Add MCMC reference lines
+    for parameter, ax in g.axes_dict.items(): 
+        y = mcmc_summary[parameter]
+        #Add reference line 
+        ax.axhline(y = y, color = 'red', ls = '--')
+        #Print out y value with annotation 
+        ax.text(x = 3.5, y = y, s = f'MCMC {moment} =' + str(np.round(y,3)), fontdict = {'fontstyle': 'normal', 'fontsize': fontsize, 'color': 'red', 'ha': 'right'})
+        ax.set_xlabel('alpha', fontsize = fontsize)
+        ax.set_ylabel('Variational ' + moment, fontsize = fontsize)
+        #make axes numbers bigger
+        ax.xaxis.set_tick_params(labelsize=fontsize)
+        ax.yaxis.set_tick_params(labelsize=fontsize)
+        ax.set_title(parameter)
+        ax.title.set_size(fontsize)
+    
+    #formatting 
+    ##Legend 
+    sns.move_legend(g, "center right", fontsize= 20, title_fontsize = 20)
+    #Attach MCMC details 
+    g._legend.legendHandles.append(mpatches.Patch(color='red', linestyle='--', label='Posterior Mean: MCMC Reference'))
+
+    #adjust spacing within subplots
+    g.fig.subplots_adjust(
+                    left=0.1,
+                    bottom=0.1,
+                    right=0.9,
+                    top=0.9,
+                    wspace=0.2,
+                    hspace=0.4)
+
+    #title 
+    g.figure.suptitle(f'Spread of VR-alpha estimated posterior {moment}s, (per alpha, K configuration for S = {S}', fontsize = 30, y = 0.95, wrap = True)
+                   
+    return g
