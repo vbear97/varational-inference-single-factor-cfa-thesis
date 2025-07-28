@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import pandas as pd
-from typing import Dict, Literal
+from typing import Dict, Literal, TypedDict
 import torch
 from dataclasses import asdict, dataclass
 from tqdm import trange
@@ -29,8 +29,30 @@ class VIOptimisationResults:
     opt_params: VIOptimisationParameters
     convergence_data: ConvergenceData
 
+class SchedulerParams(TypedDict, total = False): 
+    """Parameters for ReducedLROnPlateau scheduler"""
+    mode: str
+    threshold_mode: str
+    factor: float
+    patience: int
+    threshold: float
+    cooldown: int
+    min_lr: float
+    eps: float
+
 class VIModel(ABC):
     '''Template class for performing mean-field variational inference, given a Bayesian statistical model and given a mean field variational family'''
+
+    DEFAULT_SCHEDULER_PARAMS = {
+        'mode': 'min',
+        'threshold_mode': 'rel',
+        'factor': 0.1,
+        'patience': 1000,
+        'threshold': 0.0001,
+        'cooldown': 0,
+        'min_lr': 0.0,
+        'eps': 1e-08,
+        }
 
     def __init__(self, model: BayesianStatisticalModel, qvar: MeanFieldVariationalFamily):
         super().__init__()
@@ -73,7 +95,6 @@ class VIModel(ABC):
         else: 
             raise ValueError('Alpha must be < 1')
             
-    @property
     @abstractmethod
     def create_optimizer(self): 
         '''Customise optimizer object for each variational family'''
@@ -89,28 +110,24 @@ class VIModel(ABC):
         rel = {key: ((next[key] - prev[key])/prev[key]).abs().max() for key in prev}
         return max(rel.values())
 
-    def optimize(self, optimisation_parameters: VIOptimisationParameters, filename: str = 'OptimiseVIModel', K: int = 10, alpha: float = 0.5):
-
+    def optimize(self, optimisation_parameters: VIOptimisationParameters, filename: str = 'OptimiseVIModel', K: int = 10, alpha: float = 0.5, optimizer: torch.optim.Optimizer = None, scheduler_params:    SchedulerParams = None):
         #Initialise optimizer objects
         rel_error = []
-        optimizer = self.create_optimizer()
+        if not optimizer: 
+            optimizer = self.create_optimizer()
+
+        if not scheduler_params: 
+            scheduler_params = self.DEFAULT_SCHEDULER_PARAMS
+
         count_small_errors = 0
         prev = None
         iters = trange(optimisation_parameters.num_iterations, mininterval=1)
 
-        #TODO: Give learning rate scheduler flexible inputs
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
             optimizer, 
-            mode = 'min',
-            threshold_mode = 'rel',
-            factor = 0.1, 
-            patience = 1000, 
-            threshold=0.0001, 
-            cooldown= 0, 
-            min_lr = 0, 
-            eps = 1e-08, 
-            )
-
+            **scheduler_params
+        )
+        
         filename = filename + "_K_" + str(K) + "_alpha" + str(alpha)
         writer = SummaryWriter(filename)    
     
