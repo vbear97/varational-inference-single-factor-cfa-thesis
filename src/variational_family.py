@@ -28,14 +28,14 @@ class MeanFieldVariationalFamily(ABC):
         pass
 
 class SingleCFAVariationalFamily(MeanFieldVariationalFamily): 
-    '''Hard coded starting point'''
+    '''Single CFA Variational Family with hard-coded starting point'''
     def __init__(self, m, n, degenerates: Dict[Literal['nu', 'lam',  'eta', 'psi', 'sig2'], torch.tensor] = None):
         qvar = {
             'nu': Normal(m, mu= torch.zeros(m), log_s = torch.zeros(m)), 
             'lam': Normal(m-1, mu = torch.ones(m-1), log_s = torch.zeros(m-1)), 
-            'eta': Normal(n, mu = torch.zeros(n), log_s = torch.zeros(n)), 
-            'psi': InvGamma(m, log_alpha = torch.zeros(m), log_beta = torch.zeros(m)), 
-            'sig2': InvGamma(1, log_alpha = torch.tensor(0.0), log_beta = torch.tensor(0.0))
+            'eta': Normal(n, mu = torch.zeros(n), log_s = torch.ones(n)), 
+            'psi': InvGamma(m, log_alpha = torch.ones(m), log_beta = torch.ones(m)), 
+            'sig2': InvGamma(1, log_alpha = torch.tensor(1.00), log_beta = torch.tensor(1.00))
         }
         self.degenerates = degenerates or {}
         for param_name, degenerate_value in degenerates.items(): 
@@ -49,7 +49,7 @@ class SingleCFAVariationalFamily(MeanFieldVariationalFamily):
             # Handle nu parameters (if not degenerate)
             if 'nu' not in self.degenerates:
                 for i in range(len(self.qvar_by_var['nu'].var_params[0])):
-                    scalars[f'nu{i+1}_mean'] = self.qvar_by_var['nu'].var_params[0][i].item()
+                    scalars[f'nu{i+1}_mean'] = self.qvar_by_var['nu'].var_params[0][i].item() 
                     scalars[f'nu{i+1}_sig'] = self.qvar_by_var['nu'].var_params[1][i].exp().item()
             
             # Handle lambda parameters (if not degenerate)
