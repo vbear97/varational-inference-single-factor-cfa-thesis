@@ -188,7 +188,7 @@ class SingleCFAVIModel(VIModel):
         #TODO: Make more customized, if required 
         optimizer = torch.optim.Adam([{'params': [self.qvar.qvar_by_var['nu'].var_params, self.qvar.qvar_by_var['lam'].var_params], 'lr': 0.01},\
      {'params': [self.qvar.qvar_by_var['psi'].var_params, self.qvar.qvar_by_var['sig2'].var_params], 'lr': 0.1},\
-         {'params':[self.qvar.qvar_by_var['eta'].var_params], 'lr': 0.01} 
+         {'params':[self.qvar.qvar_by_var['eta'].var_params], 'lr': 0.1} 
          ]
          )
         return optimizer 
