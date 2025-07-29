@@ -9,3 +9,4 @@ data/
 httpstan-4.13.0 2/
 notebooks/build
 src/analytical_variational_inference/__pycache__
+notebooks/external_images
