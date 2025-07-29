@@ -5,10 +5,13 @@ import numpy as np
 import torch
 from torch.distributions import MultivariateNormal as mvn 
 
-def sample_from_distribution(dist_by_var: Dict[str, torch.distributions.Distribution], n: int = 60_000) -> pd.DataFrame:
-    '''Sample n times from optimised variational distributions'''
+def sample_from_distribution(dist_by_var: Dict[str, torch.distributions.Distribution], n: int = 60_000, latent_only = True) -> pd.DataFrame:
+    '''Sample n times from optimised variational distributions, either for all variables or only non-latent variables'''
     samples_by_scalar = {}
     for var, dist in dist_by_var.items(): 
+        if var == 'eta' and latent_only: 
+            continue
+
         if dist:
             sample = dist.rsample(torch.Size([n])).detach().numpy()
             if sample.ndim>1: 
