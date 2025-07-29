@@ -56,6 +56,7 @@ class InvGamma(VariationalDistribution):
 class Degenerate(VariationalDistribution): 
     def __init__(self, fixed_value: tensor):
         self.var_params = fixed_value
+        #Since the variational parameter is fixed to a point value, we do NOT require gradients.
         self.var_params.requires_grad = False 
 
     def dist(self): 

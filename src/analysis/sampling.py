@@ -1,7 +1,5 @@
-from dataclasses import dataclass, asdict
 from typing import Dict
 import pandas as pd 
-import numpy as np
 import torch
 from torch.distributions import MultivariateNormal as mvn 
 
@@ -11,7 +9,6 @@ def sample_from_distribution(dist_by_var: Dict[str, torch.distributions.Distribu
     for var, dist in dist_by_var.items(): 
         if var == 'eta' and latent_only: 
             continue
-
         if dist:
             sample = dist.rsample(torch.Size([n])).detach().numpy()
             if sample.ndim>1: 

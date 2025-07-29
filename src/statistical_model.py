@@ -22,7 +22,7 @@ class BayesianStatisticalModel(ABC):
     @abstractmethod
     def log_prior(self, params): 
         '''Compute log prior density of model params.'''
-    
+        pass 
 
 class SingleFactorCFA(BayesianStatisticalModel): 
     '''Single Factor Confirmatory Factor Analysis Model with lambda_1 set to 1 for identifiability'''

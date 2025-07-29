@@ -1,13 +1,10 @@
 from abc import ABC, abstractmethod
-import pandas as pd
 from typing import Dict, Literal, TypedDict
 import torch
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from tqdm import trange
 from timeit import default_timer as timer
 from torch.utils.tensorboard import SummaryWriter
-
-from .analysis.sampling import sample_from_distribution
 
 from .variational_family import MeanFieldVariationalFamily, SingleCFAVariationalFamily
 from .statistical_model import BayesianStatisticalModel, SingleFactorCFA

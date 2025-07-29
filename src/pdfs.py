@@ -11,7 +11,7 @@ class InverseGamma():
     Args: 
     concentration, rate (float or Tensor): concentration, rate of the Gamma distribution
     '''
-    def __init__(self, concentration, rate, validate_args = None): 
+    def __init__(self, concentration, rate): 
         self.base_dist = Gamma(concentration = concentration, rate = rate, validate_args=None)
         self.concentration = concentration
         self.rate = rate

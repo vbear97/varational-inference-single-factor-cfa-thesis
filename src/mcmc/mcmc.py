@@ -73,6 +73,7 @@ def _mcmc(data):
     return posterior
 
 def single_factor_cfa_mcmc(y_data: torch.tensor, hyper_params) -> pd.DataFrame:
+    '''Run Hamiltonian MCMC for single-factor confirmatory factor analysis model.'''
     data = {
         "y": y_data.numpy(), 
         "N": y_data.size(0), 

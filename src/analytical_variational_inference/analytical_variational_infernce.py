@@ -139,6 +139,7 @@ MFVBoutput <- MFVBforSEM(y,n,m,mu.lambda,sigsq.lambda,sigsq.nu,delta.psi,
                          delta.sigsq,tolVal,maxIter,convChk=TRUE)"""
 
 def single_factor_cfa_mfvb() -> SingleCFAVariationalParameters:
+    '''Run R code for mean field variational bayes (analytical variatioal inference.)'''
     #Run R code 
     robjects.r(mfvbcode)
     rmfvb = robjects.globalenv['MFVBoutput']

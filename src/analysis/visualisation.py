@@ -25,7 +25,6 @@ def plot_credint(
         title: Plot title 
         quantiles: [Lower, Upper] quantile 
         figsize: Figure size
-
     '''
     variables = sorted(list(set.intersection(*[set(df.columns) for df in data.values()])))
 
@@ -105,7 +104,16 @@ def plot_moments_boxplot(
     showoutliers = True, 
     fontsize: int = 30
     ): 
+    '''
+    Plot estimated posterior means/variances by alpha, K and distribution parameters.
 
+    Args: 
+        df_by_alpha_k: List of sampled dataframes by alpha and K
+        mcmc_df: Sampled MCMC dataframe 
+        moment: One of 'mean' or 'var' for posterior mean or posterior variance.
+        showoutliers: Whether or not to display boxplot outliers 
+        fontsize: Fontsize in boxplot
+    '''
     #Create VI statistics
     list_summary_df: list[pd.Series] = []
     for (alpha,K), list_df in df_by_alpha_k.items(): 
