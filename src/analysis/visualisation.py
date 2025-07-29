@@ -99,34 +99,38 @@ def plot_eta(vidf: pd.DataFrame, mcmc_df: pd.DataFrame, moment = Literal['mean',
     ax.axline(xy1 = (0,0), slope = 1, label = 'y=x line')
 
 def plot_moments_boxplot(
-    batched_vi_models_by_alpha_k: Dict[tuple[float], list[pd.DataFrame]],
+    df_by_alpha_k: Dict[tuple[float], list[pd.DataFrame]],
     mcmc_df: pd.DataFrame, 
     moment: Literal['mean', 'var'], 
     showoutliers = True, 
-    fontsize: int = 20
+    fontsize: int = 30
     ): 
 
     #Create VI statistics
     list_summary_df: list[pd.Series] = []
-    for (alpha,K), list_df in batched_vi_models_by_alpha_k.items(): 
+    for (alpha,K), list_df in df_by_alpha_k.items(): 
         for index, df in enumerate(list_df):
-            moments= pd.DataFrame([getattr(df, moment)], name = 'moment')
-            moments['alpha'] = alpha 
-            moments['K'] = K 
-            moments['S'] = index 
-            list_summary_df.append(moments)
+            moments = getattr(df, moment)()
+            moments_df = moments.to_frame(name = moment).T
+            moments_df['alpha'] = alpha 
+            moments_df['K'] = K 
+            moments_df['S'] = index 
+            list_summary_df.append(moments_df)
     
     #assume same length 
     S = len(list_df)
-    df = pd.concatenate(list_summary_df, ignore_index = True)
+    df = pd.concat(list_summary_df, ignore_index = True)
+
+    #Flatten 
+    df = pd.melt(frame = df, id_vars = ['alpha', 'K', 'S'], var_name = 'parameter', value_name = moment)
 
     #Create MCMC statistics 
-    mcmc_summary = getattr(mcmc_df, moment)
+    mcmc_summary: pd.Series= getattr(mcmc_df, moment)()
     
     #Boxplot 
     g = sns.catplot(data  = df, 
                     x = 'alpha', 
-                    y = 'moment', 
+                    y = moment, 
                     hue = 'K', 
                     col = 'parameter',
                     kind = 'box', 
@@ -142,10 +146,10 @@ def plot_moments_boxplot(
     for parameter, ax in g.axes_dict.items(): 
         y = mcmc_summary[parameter]
         #Add reference line 
-        ax.axhline(y = y, color = 'red', ls = '--')
+        ax.axhline(y = y, color = 'red', ls = '--', linewidth = 5)
         #Print out y value with annotation 
-        ax.text(x = 3.5, y = y, s = f'MCMC {moment} =' + str(np.round(y,3)), fontdict = {'fontstyle': 'normal', 'fontsize': fontsize, 'color': 'red', 'ha': 'right'})
-        ax.set_xlabel('alpha', fontsize = fontsize)
+        # ax.text(x = 3.5, y = y, s = f'y =' + str(np.round(y,3)), fontdict = {'fontstyle': 'normal', 'fontsize': fontsize, 'color': 'red', 'ha': 'right'})
+        ax.set_xlabel('$\\alpha$', fontsize = fontsize)
         ax.set_ylabel('Variational ' + moment, fontsize = fontsize)
         #make axes numbers bigger
         ax.xaxis.set_tick_params(labelsize=fontsize)
@@ -154,10 +158,14 @@ def plot_moments_boxplot(
         ax.title.set_size(fontsize)
     
     #formatting 
-    ##Legend 
-    sns.move_legend(g, "center right", fontsize= 20, title_fontsize = 20)
-    #Attach MCMC details 
-    g._legend.legendHandles.append(mpatches.Patch(color='red', linestyle='--', label='Posterior Mean: MCMC Reference'))
+    #Attach MCMC details to legend
+    mcmc_line = mlines.Line2D([], [], color = 'red', linestyle = '--', linewidth = 5, label = f"MCMC {moment}")
+    g._legend.legend_handles.append(mcmc_line)
+
+    #Recreate and move legend 
+    g._legend.remove()
+    g.fig.legend(handles = g._legend.legend_handles,loc="center right", fontsize=20, 
+            title='Plot Elements', title_fontsize=20)
 
     #adjust spacing within subplots
     g.fig.subplots_adjust(
@@ -169,6 +177,6 @@ def plot_moments_boxplot(
                     hspace=0.4)
 
     #title 
-    g.figure.suptitle(f'Spread of VR-alpha estimated posterior {moment}s, (per alpha, K configuration for S = {S}', fontsize = 30, y = 0.95, wrap = True)
+    g.figure.suptitle(f'VR-$\\alpha$ estimated posterior {moment}s vs. MCMC (per $\\alpha$, K configuration for S = {S})', fontsize = 30, y = 0.95, wrap = True)
                    
     return g
