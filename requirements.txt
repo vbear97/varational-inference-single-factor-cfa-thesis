@@ -1,0 +1,139 @@
+absl-py==2.3.1
+aiohappyeyeballs @ file:///Users/vivbear/Documents/data_science_and_ai/variational-inference-single-factor-cfa-thesis/httpstan-4.13.0%202/aiohappyeyeballs-2.6.1-py3-none-any.whl#sha256=f349ba8f4b75cb25c99c5c2d84e997e485204d2902a9597802b0371f09331fb8
+aiohttp @ file:///Users/vivbear/Documents/data_science_and_ai/variational-inference-single-factor-cfa-thesis/httpstan-4.13.0%202/aiohttp-3.12.14-cp310-cp310-macosx_11_0_arm64.whl#sha256=fbb284d15c6a45fab030740049d03c0ecd60edad9cd23b211d7e11d3be8d56fd
+aiosignal @ file:///Users/vivbear/Documents/data_science_and_ai/variational-inference-single-factor-cfa-thesis/httpstan-4.13.0%202/aiosignal-1.4.0-py3-none-any.whl#sha256=053243f8b92b990551949e63930a839ff0cf0b0ebbe0597b0f3fb19e1a0fe82e
+anyio==4.9.0
+appdirs @ file:///Users/vivbear/Documents/data_science_and_ai/variational-inference-single-factor-cfa-thesis/httpstan-4.13.0%202/appdirs-1.4.4-py2.py3-none-any.whl#sha256=a841dacd6b99318a741b166adb07e19ee71a274450e68237b4650ca1055ab128
+appnope==0.1.4
+arviz==0.22.0
+asttokens==3.0.0
+async-timeout @ file:///Users/vivbear/Documents/data_science_and_ai/variational-inference-single-factor-cfa-thesis/httpstan-4.13.0%202/async_timeout-5.0.1-py3-none-any.whl#sha256=39e3809566ff85354557ec2398b55e096c8364bacac9405a7a1fa429e77fe76c
+attrs @ file:///Users/vivbear/Documents/data_science_and_ai/variational-inference-single-factor-cfa-thesis/httpstan-4.13.0%202/attrs-25.3.0-py3-none-any.whl#sha256=427318ce031701fea540783410126f03899a97ffc6f61596ad581ac2e40e3bc3
+backports.tarfile==1.2.0
+build==1.2.2.post1
+CacheControl==0.14.3
+certifi==2025.7.14
+cffi==1.17.1
+charset-normalizer==3.4.2
+cleo==2.1.0
+clikit==0.6.2
+comm==0.2.2
+contourpy==1.3.2
+crashtest==0.3.1
+cycler==0.12.1
+Cython==3.1.2
+debugpy==1.8.15
+decorator==5.2.1
+distlib==0.4.0
+dulwich==0.22.8
+exceptiongroup==1.3.0
+executing==2.2.0
+fastjsonschema==2.21.1
+filelock==3.18.0
+findpython==0.6.3
+fonttools==4.59.0
+frozenlist @ file:///Users/vivbear/Documents/data_science_and_ai/variational-inference-single-factor-cfa-thesis/httpstan-4.13.0%202/frozenlist-1.7.0-cp310-cp310-macosx_11_0_arm64.whl#sha256=a0fd1bad056a3600047fb9462cff4c5322cebc59ebf5d0a3725e0ee78955001d
+fsspec==2025.7.0
+grpcio==1.73.1
+h11==0.16.0
+h5netcdf==1.6.3
+h5py==3.14.0
+httpcore==1.0.9
+httpstan @ file:///Users/vivbear/Documents/data_science_and_ai/variational-inference-single-factor-cfa-thesis/httpstan-4.13.0%202/httpstan-4.13.0-cp310-cp310-macosx_12_0_arm64.whl#sha256=ed8b5788e326298a433ce9e2b47f5c93f244440f7705b34320126ce8dd1dc55a
+httpx==0.28.1
+idna==3.10
+importlib_metadata==8.7.0
+installer==0.7.0
+ipykernel==6.30.0
+ipython==8.37.0
+jaraco.classes==3.4.0
+jaraco.context==6.0.1
+jaraco.functools==4.2.1
+jedi==0.19.2
+Jinja2==3.1.6
+joblib==1.5.1
+jupyter_client==8.6.3
+jupyter_core==5.8.1
+keyring==25.6.0
+kiwisolver==1.4.8
+Markdown==3.8.2
+MarkupSafe==3.0.2
+marshmallow @ file:///Users/vivbear/Documents/data_science_and_ai/variational-inference-single-factor-cfa-thesis/httpstan-4.13.0%202/marshmallow-3.26.1-py3-none-any.whl#sha256=3350409f20a70a7e4e11a27661187b77cdcaeb20abca41c1454fe33636bea09c
+matplotlib==3.10.3
+matplotlib-inline==0.1.7
+more-itertools==10.7.0
+mpmath==1.3.0
+msgpack==1.1.1
+multidict @ file:///Users/vivbear/Documents/data_science_and_ai/variational-inference-single-factor-cfa-thesis/httpstan-4.13.0%202/multidict-6.6.3-cp310-cp310-macosx_11_0_arm64.whl#sha256=dd7793bab517e706c9ed9d7310b06c8672fd0aeee5781bfad612f56b8e0f7d14
+nest-asyncio==1.6.0
+networkx==3.4.2
+numdifftools==0.9.41
+numpy==2.2.6
+packaging==25.0
+pandas==2.3.1
+parso==0.8.4
+pastel==0.2.1
+patsy==1.0.1
+pbs-installer==2025.7.23
+pexpect==4.9.0
+pillow==11.3.0
+pkginfo==1.12.1.2
+platformdirs==4.3.8
+poetry==2.1.3
+poetry-core==2.1.3
+prompt_toolkit==3.0.51
+propcache @ file:///Users/vivbear/Documents/data_science_and_ai/variational-inference-single-factor-cfa-thesis/httpstan-4.13.0%202/propcache-0.3.2-cp310-cp310-macosx_11_0_arm64.whl#sha256=3def3da3ac3ce41562d85db655d18ebac740cb3fa4367f11a52b3da9d03a5cc3
+protobuf==6.31.1
+psutil==7.0.0
+ptyprocess==0.7.0
+pure_eval==0.2.3
+pycparser==2.22
+Pygments==2.19.2
+pylev==1.4.0
+pyparsing==3.2.3
+pyproject_hooks==1.2.0
+pysimdjson==6.0.2
+pystan==3.10.0
+python-dateutil==2.9.0.post0
+pytz==2025.2
+pyzmq==27.0.0
+RapidFuzz==3.13.0
+requests==2.32.4
+requests-toolbelt==1.0.0
+rpy2==3.6.1
+rpy2-rinterface==3.6.1
+rpy2-robjects==3.6.1
+scikit-learn==1.7.1
+scipy==1.15.3
+seaborn==0.13.2
+semopy==2.3.11
+shellingham==1.5.4
+six==1.17.0
+sniffio==1.3.1
+stack-data==0.6.3
+statsmodels==0.14.5
+sympy==1.14.0
+tensorboard==2.20.0
+tensorboard-data-server==0.7.2
+threadpoolctl==3.6.0
+tomli==2.2.1
+tomlkit==0.13.3
+torch==2.7.1
+tornado==6.5.1
+tqdm==4.67.1
+traitlets==5.14.3
+trove-classifiers==2025.5.9.12
+typing_extensions==4.14.1
+tzdata==2025.2
+tzlocal==5.3.1
+urllib3==2.5.0
+virtualenv==20.32.0
+wcwidth==0.2.13
+webargs @ file:///Users/vivbear/Documents/data_science_and_ai/variational-inference-single-factor-cfa-thesis/httpstan-4.13.0%202/webargs-8.7.0-py3-none-any.whl#sha256=4571de9ff5aac98ef528d9cecd7dbc0e05c0e9149e8293a01d1d1398abfcf780
+Werkzeug==3.1.3
+xarray==2025.6.1
+xarray-einstats==0.8.0
+xattr==1.2.0
+yarl @ file:///Users/vivbear/Documents/data_science_and_ai/variational-inference-single-factor-cfa-thesis/httpstan-4.13.0%202/yarl-1.20.1-cp310-cp310-macosx_11_0_arm64.whl#sha256=0c869f2651cc77465f6cd01d938d91a11d9ea5d798738c1dc077f3de0b5e5fed
+zipp==3.23.0
+zstandard==0.23.0
