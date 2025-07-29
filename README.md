@@ -22,7 +22,15 @@ An alternative method for approximating posteriors is an optimisation technique 
 
 **Purpose** 
 
+**Purpose 1: Improve VI Accuracy**
+
 This codebase explores what happens when we experiment with different "closeness" measures. The traditional "closeness" measure is the KL Divergence, and here we extend these closeness measures to the Renyi Divergence family.
+
+In particular, we seek to solve the problem of variance underestimation: traditional VI that minimises the KL divergence tends to underestimate posterior variances. 
+
+**Purpose 2: Demonstrate that Renyi Divergence VI can be implemented in a black-box manner**
+
+Dang (2022) applied KLVI to a single factor confirmatory factor analysis model using analytical methods. Using this same statistical model, I demonstrate that VI techniques 
 
 **Background Statistical Model**
 
