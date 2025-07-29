@@ -18,7 +18,7 @@ def plot_credint(
         figsize = (10, 10), 
     ) -> plt.Figure: 
     '''
-    Plot credible intervals and means for multiple posterior estimation methods across common estimated parameters.
+    Plot credible intervals and means for multiple posterior estimation methods across common estimated parameter with each dataframe.
 
     Args: 
         data: Dict mapping method names to dataframes 
@@ -26,6 +26,7 @@ def plot_credint(
         quantiles: [Lower, Upper] quantile 
         figsize: Figure size
     '''
+    #Get common variables between dataframes 
     variables = sorted(list(set.intersection(*[set(df.columns) for df in data.values()])))
 
     #Calculate layout 
@@ -88,6 +89,12 @@ def plot_credint(
 
 def plot_eta(vidf: pd.DataFrame, mcmc_df: pd.DataFrame, moment = Literal['mean', 'var'], figsize = (5,5)): 
     '''Create scatterplot of eta moments (y-axis) vs MCMC means'''
+    
+    if not all([col.starts_with('eta') for col in vidf.columns]): 
+        raise ValueError("Found columns in vidf corresponding to parameters that are not eta ")
+    
+    if not all([col.starts_with('eta') for col in vidf.columns]): 
+        raise ValueError("Found columns in mcmc_df corresponding to parameters that are not eta ")
     
     fig, ax = plt.subplots(figsize = (5,5))
     fig.suptitle(f'Comparison of Eta {moment}')

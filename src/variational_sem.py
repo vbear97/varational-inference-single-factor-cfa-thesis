@@ -6,6 +6,7 @@ from tqdm import trange
 from timeit import default_timer as timer
 from torch.utils.tensorboard import SummaryWriter
 
+from .custom_types import SINGLE_CFA_VARIABLES_LITERAL
 from .variational_family import MeanFieldVariationalFamily, SingleCFAVariationalFamily
 from .statistical_model import BayesianStatisticalModel, SingleFactorCFA
 
@@ -58,17 +59,17 @@ class VIModel(ABC):
         self.is_fitted = False 
         self.results: VIOptimisationResults = None
 
-    def _elbo(self): 
+    def _elbo(self) -> torch.tensor:
         '''Calculate the evidence lower bound'''
         theta_sample = self.qvar.generate_theta_sample()
         return self.model.log_likelihood(theta_sample) + self.model.log_prior(theta_sample) - self.qvar.entropy(theta_sample)
     
-    def _elbo_multi(self, K: int = 10): 
+    def _elbo_multi(self, K: int = 10) -> torch.tensor:
         '''Calculate evidence lower bound by averaging over K realisations from qvar'''
         elbos = torch.stack([self._elbo() for k in range(K)])
         return elbos.mean()
 
-    def vr_bound(self, K:int = 10, alpha: float = 0.5): 
+    def vr_bound(self, K:int = 10, alpha: float = 0.5) -> torch.tensor:
         '''
         Calculate the generalised VR bound (generalisation of ELBO), wich is used to perform Renyi Divergence Variational Inference. 
         Technically, only values larger than 0 correspond to valid Reny divergences. 
@@ -90,10 +91,10 @@ class VIModel(ABC):
             return self._elbo_multi(K = K)
             
         else: 
-            raise ValueError('Alpha must be < 1')
+            raise ValueError('Alpha must be <= 1')
             
     @abstractmethod
-    def create_optimizer(self): 
+    def create_optimizer(self) -> torch.optim.Optimizer:
         '''Customise optimizer object for each variational family'''
         pass 
 
@@ -176,12 +177,14 @@ class VIModel(ABC):
 class SingleCFAVIModel(VIModel): 
     '''VI Model class for single factor confirmatory factor analysis model. '''
         
-    def __init__(self, y_data, hyper_params, degenerates: Dict[Literal['nu', 'lam',  'eta', 'psi', 'sig2'], torch.tensor] = None):
+    def __init__(self, y_data, hyper_params, degenerates: Dict[SINGLE_CFA_VARIABLES_LITERAL, torch.tensor] = None):
+        #Instantiate stats model 
         stats_model = SingleFactorCFA(y_data = y_data, hyper_params=hyper_params, degenerates = degenerates.keys())
+        #Instantiate mean field variational family 
         qvar = SingleCFAVariationalFamily(m = y_data.shape[1], n = y_data.shape[0], degenerates = degenerates)
         super().__init__(stats_model, qvar)
     
-    def create_optimizer(self): 
+    def create_optimizer(self) -> torch.optim.Optimizer:
         optimizer = torch.optim.Adam([{'params': [self.qvar.qvar_by_var['nu'].var_params, self.qvar.qvar_by_var['lam'].var_params], 'lr': 0.01},\
      {'params': [self.qvar.qvar_by_var['psi'].var_params, self.qvar.qvar_by_var['sig2'].var_params], 'lr': 0.1},\
          {'params':[self.qvar.qvar_by_var['eta'].var_params], 'lr': 0.1} 

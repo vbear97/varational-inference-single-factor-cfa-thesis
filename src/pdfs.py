@@ -16,12 +16,12 @@ class InverseGamma():
         self.concentration = concentration
         self.rate = rate
     
-    def log_prob(self,y):
+    def log_prob(self,y) -> torch.tensor:
         #1/0 not a problem here, since log_prob will only be evaluated on theta_sample
         abs_dj = torch.square(torch.reciprocal(y))
         y_rec = torch.reciprocal(y)
         return self.base_dist.log_prob(y_rec) + torch.log(abs_dj)
     
-    def rsample(self, n= torch.Size([])): 
+    def rsample(self, n= torch.Size([])) -> torch.tensor:
         base_sample = self.base_dist.rsample(n)
         return torch.reciprocal(base_sample)

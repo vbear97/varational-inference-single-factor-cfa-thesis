@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional
+from typing import Literal, Optional
 from torch.distributions import MultivariateNormal as mvn 
 from .pdfs import InverseGamma
 
@@ -10,3 +10,5 @@ class SingleCFAVariationalParameters:
     psi: InverseGamma
     sig2: InverseGamma
     eta: Optional[mvn] = None
+
+SINGLE_CFA_VARIABLES_LITERAL = Literal['nu', 'lam',  'eta', 'psi', 'sig2']

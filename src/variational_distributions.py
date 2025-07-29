@@ -17,11 +17,11 @@ class VariationalDistribution(ABC):
         '''Invoke the underlying torch distribution object'''
         pass
 
-    def log_prob(self, x):
+    def log_prob(self, x) -> torch.tensor:
         '''Calculate log pdf, assuming independent '''
         return self.dist().log_prob(x).sum()
 
-    def rsample(self, n = torch.Size([])): 
+    def rsample(self, n = torch.Size([])) -> torch.tensor:
         '''Sample using reparameterisation'''
         return self.dist().rsample(n)
 

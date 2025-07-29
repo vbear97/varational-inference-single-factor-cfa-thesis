@@ -15,12 +15,12 @@ class BayesianStatisticalModel(ABC):
         self.degenerates = degenerates or []
 
     @abstractmethod
-    def log_likelihood(self, params): 
+    def log_likelihood(self, params: Dict[str, torch.tensor]) -> torch.tensor:
         '''Compute the log-likelihood of data given model params.'''
         pass 
 
     @abstractmethod
-    def log_prior(self, params): 
+    def log_prior(self, params: Dict[str, torch.tensor]) -> torch.tensor:
         '''Compute log prior density of model params.'''
         pass 
 
