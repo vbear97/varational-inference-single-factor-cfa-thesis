@@ -44,7 +44,6 @@ class SingleCFAVariationalFamily(MeanFieldVariationalFamily):
         super().__init__(qvar)
     
     def natural_param_values(self): 
-        #TODO: Make flexible if m,n values change 
             scalars = {}
             # Handle nu parameters (if not degenerate)
             if 'nu' not in self.degenerates:

@@ -25,7 +25,10 @@ class BayesianStatisticalModel(ABC):
     
 
 class SingleFactorCFA(BayesianStatisticalModel): 
-    '''Single Factor Confirmatory Factor Analysis Model'''
+    '''Single Factor Confirmatory Factor Analysis Model with lambda_1 set to 1 for identifiability'''
+    
+    #Set lambda_1 to 1 for model identifiability purposes
+    lam1= torch.tensor([1.0])
 
     def __init__(self, y_data, hyper_params, degenerates):
         super().__init__(y_data, hyper_params, degenerates)
@@ -37,8 +40,7 @@ class SingleFactorCFA(BayesianStatisticalModel):
         covariance = torch.diag(params['psi'])
         
         #Lambda_1 is fixed to 1 for model explainability 
-        #TODO: Find somewhere else to hard-code this
-        lam_full = torch.cat((torch.tensor([1.0]), params['lam']))
+        lam_full = torch.cat((self.lam1, params['lam']))
         
         #Means 
         like_dist_means = params['nu'] + torch.matmul(params['eta'].unsqueeze(1), lam_full.unsqueeze(0))
@@ -46,7 +48,6 @@ class SingleFactorCFA(BayesianStatisticalModel):
         return MultivariateNormal(like_dist_means, covariance_matrix= covariance).log_prob(self.y_data).sum()
     
     def log_prior(self, params: Dict[str, torch.tensor]):
-        #TODO: Move priors as a class level variable? 
         priors = {'nu': Normal(loc = self.hyper_params['nu_mean'], scale = torch.sqrt(self.hyper_params['nu_sig2'])), \
             
         'sig2': InverseGamma(concentration = self.hyper_params['sig2_shape'], rate = self.hyper_params['sig2_rate']),\

@@ -150,7 +150,6 @@ def single_factor_cfa_mfvb() -> SingleCFAVariationalParameters:
     lam_mean = mfvb['mu.q.lambda.MFVB'][1:]         
     lam_sig2 = mfvb['sigsq.q.lambda.MFVB'][1:]  
     #Extract scalars
-    #TODO: Make this better
     sig2_alpha = mfvb['kappa.q.sigsq.MFVB'].item()/ 2    
     sig2_rate = mfvb['delta.q.sigsq.MFVB'].item()/ 2       
     psi_alpha = mfvb['kappa.q.psi.MFVB']/ 2       
