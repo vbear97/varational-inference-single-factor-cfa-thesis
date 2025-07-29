@@ -30,7 +30,7 @@ In particular, we seek to solve the problem of variance underestimation: traditi
 
 **Purpose 2: Demonstrate that Renyi Divergence VI can be implemented in a black-box manner**
 
-Dang (2022) applied KLVI to a single factor confirmatory factor analysis model using analytical methods. Using this same statistical model, I demonstrate that VI techniques 
+Dang (2022) applied KLVI to a single factor confirmatory factor analysis model using analytical methods. Using this same statistical model, I demonstrate that both KLVI and Renyi Divergence VI can be performed using black-box methods i.e. via automatic differentiation.
 
 **Background Statistical Model**
 
