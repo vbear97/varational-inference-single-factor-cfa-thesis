@@ -50,6 +50,30 @@ pip install -r requirements.txt
 
 See additional installation instructions for installing the ```pystan``` package on Apple M1: https://pystan.readthedocs.io/en/latest/faq.html. 
 
+### Optional Steps 
+3. Install development dependencies (for code formatting):
+```bash 
+pip install autopep8
+
+```
+4. Set up Git hooks for automatic PEP-8 formatting:
+```bash
+cat > .git/hooks/pre-commit << 'EOF'
+#!/bin/bash
+
+# Format Python files with autopep8
+autopep8 --in-place --aggressive --aggressive $(find . -name "*.py")
+
+# Add the formatted files back to staging
+git add $(find . -name "*.py")
+
+echo "Code formatted with autopep8"
+EOF
+
+# Make executable
+chmod +x .git/hooks/pre-commit
+```
+
 # Getting Started
 
 The core workflow is captured in the ```notebooks``` folder: 

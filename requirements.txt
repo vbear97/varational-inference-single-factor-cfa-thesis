@@ -9,13 +9,16 @@ arviz==0.22.0
 asttokens==3.0.0
 async-timeout @ file:///Users/vivbear/Documents/data_science_and_ai/variational-inference-single-factor-cfa-thesis/httpstan-4.13.0%202/async_timeout-5.0.1-py3-none-any.whl#sha256=39e3809566ff85354557ec2398b55e096c8364bacac9405a7a1fa429e77fe76c
 attrs @ file:///Users/vivbear/Documents/data_science_and_ai/variational-inference-single-factor-cfa-thesis/httpstan-4.13.0%202/attrs-25.3.0-py3-none-any.whl#sha256=427318ce031701fea540783410126f03899a97ffc6f61596ad581ac2e40e3bc3
+autopep8==2.3.2
 backports.tarfile==1.2.0
 build==1.2.2.post1
 CacheControl==0.14.3
 certifi==2025.7.14
 cffi==1.17.1
+cfgv==3.4.0
 charset-normalizer==3.4.2
 cleo==2.1.0
+click==8.2.1
 clikit==0.6.2
 comm==0.2.2
 contourpy==1.3.2
@@ -41,6 +44,7 @@ h5py==3.14.0
 httpcore==1.0.9
 httpstan @ file:///Users/vivbear/Documents/data_science_and_ai/variational-inference-single-factor-cfa-thesis/httpstan-4.13.0%202/httpstan-4.13.0-cp310-cp310-macosx_12_0_arm64.whl#sha256=ed8b5788e326298a433ce9e2b47f5c93f244440f7705b34320126ce8dd1dc55a
 httpx==0.28.1
+identify==2.6.12
 idna==3.10
 importlib_metadata==8.7.0
 installer==0.7.0
@@ -65,14 +69,17 @@ more-itertools==10.7.0
 mpmath==1.3.0
 msgpack==1.1.1
 multidict @ file:///Users/vivbear/Documents/data_science_and_ai/variational-inference-single-factor-cfa-thesis/httpstan-4.13.0%202/multidict-6.6.3-cp310-cp310-macosx_11_0_arm64.whl#sha256=dd7793bab517e706c9ed9d7310b06c8672fd0aeee5781bfad612f56b8e0f7d14
+mypy_extensions==1.1.0
 nest-asyncio==1.6.0
 networkx==3.4.2
+nodeenv==1.9.1
 numdifftools==0.9.41
 numpy==2.2.6
 packaging==25.0
 pandas==2.3.1
 parso==0.8.4
 pastel==0.2.1
+pathspec==0.12.1
 patsy==1.0.1
 pbs-installer==2025.7.23
 pexpect==4.9.0
@@ -81,12 +88,14 @@ pkginfo==1.12.1.2
 platformdirs==4.3.8
 poetry==2.1.3
 poetry-core==2.1.3
+pre_commit==4.2.0
 prompt_toolkit==3.0.51
 propcache @ file:///Users/vivbear/Documents/data_science_and_ai/variational-inference-single-factor-cfa-thesis/httpstan-4.13.0%202/propcache-0.3.2-cp310-cp310-macosx_11_0_arm64.whl#sha256=3def3da3ac3ce41562d85db655d18ebac740cb3fa4367f11a52b3da9d03a5cc3
 protobuf==6.31.1
 psutil==7.0.0
 ptyprocess==0.7.0
 pure_eval==0.2.3
+pycodestyle==2.14.0
 pycparser==2.22
 Pygments==2.19.2
 pylev==1.4.0
@@ -96,6 +105,7 @@ pysimdjson==6.0.2
 pystan==3.10.0
 python-dateutil==2.9.0.post0
 pytz==2025.2
+PyYAML==6.0.2
 pyzmq==27.0.0
 RapidFuzz==3.13.0
 requests==2.32.4
